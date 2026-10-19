@@ -8,6 +8,7 @@ import { Footer } from './components/Footer';
 import { DownloadModal } from './components/DownloadModal';
 import { AppLandingPage } from './components/AppLandingPage';
 import { AppLegalPage } from './components/AppLegalPage';
+import { WaddSubscriptionPage } from './components/WaddSubscriptionPage';
 import { APPS_CONFIG } from './data/apps';
 import { AppConfig } from './types';
 
@@ -117,7 +118,19 @@ export function App() {
     return <AppLegalPage app={waddApp} type="terms" onNavigate={handleNavigate} />;
   }
 
-  // 2. Dedicated Product Landing Pages: /[slug] (e.g. /lunoite, /wadd, /markdown)
+  // 2. Wadd Subscription & Licensing Page
+  if (
+    currentPath === '/wadd/subscription' ||
+    currentPath === '/wadd/pricing' ||
+    currentPath === '/wadd/upgrade' ||
+    currentPath === '/subscription' ||
+    currentPath === '/pricing' ||
+    currentPath === '/upgrade'
+  ) {
+    return <WaddSubscriptionPage onNavigate={handleNavigate} />;
+  }
+
+  // 3. Dedicated Product Landing Pages: /[slug] (e.g. /lunoite, /wadd, /markdown)
   const matchedApp = findAppForPath(currentPath);
   if (matchedApp) {
     return <AppLandingPage app={matchedApp} onNavigate={handleNavigate} />;

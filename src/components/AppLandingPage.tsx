@@ -133,6 +133,15 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
             >
               Downloads
             </a>
+            {app.slug === 'wadd' && (
+              <button
+                type="button"
+                onClick={() => onNavigate('/wadd/subscription')}
+                className="text-pine font-medium hover:underline transition-colors focus-visible:outline-2 focus-visible:outline-pine"
+              >
+                Pricing
+              </button>
+            )}
             <button
               type="button"
               onClick={() => onNavigate(`/${app.slug}/privacy`)}
@@ -212,6 +221,16 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
               <GithubIcon className="h-4 w-4" />
               <span>View Source Code</span>
             </a>
+
+            {app.slug === 'wadd' && (
+              <button
+                type="button"
+                onClick={() => onNavigate('/wadd/subscription')}
+                className="inline-flex items-center gap-2 rounded-md border border-teal-500/30 bg-teal-500/10 px-4 py-2.5 text-xs sm:text-sm font-medium text-teal-400 hover:bg-teal-500/20 transition-colors min-h-[44px] focus-visible:outline-2 focus-visible:outline-pine"
+              >
+                <span>Pricing &amp; Plans</span>
+              </button>
+            )}
           </div>
 
           <div className="text-[11px] font-mono text-muted">

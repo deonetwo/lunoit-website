@@ -92,6 +92,15 @@ export const Footer: React.FC<FooterProps> = ({ onOpenDownload, onNavigate }) =>
               ))}
               <li>
                 <a
+                  href="/wadd/subscription"
+                  onClick={(e) => handleLink('/wadd/subscription', e)}
+                  className="hover:text-main transition-colors text-pine font-medium flex items-center gap-1.5"
+                >
+                  <span>Wadd Licensing &amp; Pricing</span>
+                </a>
+              </li>
+              <li>
+                <a
                   href="#apps"
                   className="hover:text-main transition-colors text-muted"
                 >
