@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from './hooks/useTheme';
+import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { PipelineShowcase } from './components/PipelineShowcase';
 import { StudioPhilosophy } from './components/StudioPhilosophy';
 import { Footer } from './components/Footer';
-import { DownloadModal } from './components/DownloadModal';
 import { AppLandingPage } from './components/AppLandingPage';
 import { AppLegalPage } from './components/AppLegalPage';
 import { WaddSubscriptionPage } from './components/WaddSubscriptionPage';
 import { APPS_CONFIG } from './data/apps';
+import { getLocalizedApp } from './data/localizedApps';
 import { AppConfig } from './types';
 
 function getNormalizedPath(): string {
@@ -36,9 +37,9 @@ function getNormalizedPath(): string {
   return hash;
 }
 
-export function App() {
+function AppContent() {
   const { theme, toggleTheme } = useTheme();
-  const [downloadModalOpen, setDownloadModalOpen] = useState(false);
+  const { lang } = useLanguage();
   const [currentPath, setCurrentPath] = useState<string>(getNormalizedPath);
 
   useEffect(() => {
@@ -95,7 +96,8 @@ export function App() {
     const slug = legalPrivacyMatch[1];
     const app = APPS_CONFIG.find((a) => a.slug === slug || a.aliases?.includes('/' + slug));
     if (app) {
-      return <AppLegalPage app={app} type="privacy" onNavigate={handleNavigate} />;
+      const localizedApp = getLocalizedApp(app, lang);
+      return <AppLegalPage app={localizedApp} type="privacy" onNavigate={handleNavigate} />;
     }
   }
 
@@ -104,18 +106,21 @@ export function App() {
     const slug = legalTermsMatch[1];
     const app = APPS_CONFIG.find((a) => a.slug === slug || a.aliases?.includes('/' + slug));
     if (app) {
-      return <AppLegalPage app={app} type="terms" onNavigate={handleNavigate} />;
+      const localizedApp = getLocalizedApp(app, lang);
+      return <AppLegalPage app={localizedApp} type="terms" onNavigate={handleNavigate} />;
     }
   }
 
   // Fallback standalone /privacy or /terms
   if (currentPath === '/privacy') {
     const waddApp = APPS_CONFIG.find((a) => a.slug === 'wadd')!;
-    return <AppLegalPage app={waddApp} type="privacy" onNavigate={handleNavigate} />;
+    const localizedApp = getLocalizedApp(waddApp, lang);
+    return <AppLegalPage app={localizedApp} type="privacy" onNavigate={handleNavigate} />;
   }
   if (currentPath === '/terms') {
     const waddApp = APPS_CONFIG.find((a) => a.slug === 'wadd')!;
-    return <AppLegalPage app={waddApp} type="terms" onNavigate={handleNavigate} />;
+    const localizedApp = getLocalizedApp(waddApp, lang);
+    return <AppLegalPage app={localizedApp} type="terms" onNavigate={handleNavigate} />;
   }
 
   // 2. Wadd Subscription & Licensing Page
@@ -133,17 +138,17 @@ export function App() {
   // 3. Dedicated Product Landing Pages: /[slug] (e.g. /lunoite, /wadd, /markdown)
   const matchedApp = findAppForPath(currentPath);
   if (matchedApp) {
-    return <AppLandingPage app={matchedApp} onNavigate={handleNavigate} />;
+    const localizedApp = getLocalizedApp(matchedApp, lang);
+    return <AppLandingPage app={localizedApp} onNavigate={handleNavigate} />;
   }
 
-  // 3. Root Studio Homepage: /
+  // 4. Root Studio Homepage: /
   return (
     <div className="min-h-screen bg-canvas text-main font-sans selection:bg-pine selection:text-paper antialiased">
       {/* Sticky Header Navigation */}
       <Navbar
         theme={theme}
         onToggleTheme={toggleTheme}
-        onOpenDownload={() => setDownloadModalOpen(true)}
         onNavigate={handleNavigate}
       />
 
@@ -151,13 +156,11 @@ export function App() {
       <main id="main-content">
         {/* Studio Hero Section */}
         <Hero
-          onOpenDownload={() => setDownloadModalOpen(true)}
           onNavigate={handleNavigate}
         />
 
         {/* Dynamic Apps Bento / Grid Driven by APPS_CONFIG */}
         <PipelineShowcase
-          onOpenDownload={() => setDownloadModalOpen(true)}
           onNavigate={handleNavigate}
         />
 
@@ -167,16 +170,17 @@ export function App() {
 
       {/* Global Studio Footer */}
       <Footer
-        onOpenDownload={() => setDownloadModalOpen(true)}
         onNavigate={handleNavigate}
       />
-
-      {/* Interactive Download Modal for Lunoite */}
-      <DownloadModal
-        isOpen={downloadModalOpen}
-        onClose={() => setDownloadModalOpen(false)}
-      />
     </div>
+  );
+}
+
+export function App() {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
   );
 }
 

@@ -1,4 +1,5 @@
 export type ThemeMode = 'light' | 'dark';
+export type Language = 'id' | 'en';
 
 export interface AppFeature {
   title: string;

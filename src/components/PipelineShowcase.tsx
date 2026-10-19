@@ -1,15 +1,20 @@
 import React from 'react';
 import { Layers, ArrowRight, Check, Plus, ExternalLink } from 'lucide-react';
 import { GithubIcon } from './icons/GithubIcon';
-import { APPS_CONFIG } from '../data/apps';
+import { getLocalizedAppsConfig } from '../data/localizedApps';
 import { AppConfig } from '../types';
+import { useLanguage } from '../context/LanguageContext';
+import { siteTranslations } from '../data/translations';
 
 interface PipelineShowcaseProps {
-  onOpenDownload?: () => void;
   onNavigate?: (path: string) => void;
 }
 
-export const PipelineShowcase: React.FC<PipelineShowcaseProps> = ({ onOpenDownload, onNavigate }) => {
+export const PipelineShowcase: React.FC<PipelineShowcaseProps> = ({ onNavigate }) => {
+  const { lang } = useLanguage();
+  const t = siteTranslations[lang];
+  const apps = getLocalizedAppsConfig(lang);
+
   return (
     <section id="apps" className="py-16 md:py-24 border-b border-subtle bg-canvas scroll-mt-14">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -17,19 +22,19 @@ export const PipelineShowcase: React.FC<PipelineShowcaseProps> = ({ onOpenDownlo
         <div className="mx-auto max-w-3xl text-center mb-16">
           <div className="inline-flex items-center gap-2 rounded-full border border-subtle bg-paper px-3 py-1 font-mono text-xs text-muted mb-4 shadow-2xs">
             <Layers className="h-3.5 w-3.5 text-pine" />
-            <span>Lunoit Labs Suite</span>
+            <span>{t.pipelineBadge}</span>
           </div>
           <h2 className="font-serif text-3xl font-semibold tracking-tight text-main sm:text-4xl">
-            Sovereign tools for everyday productivity.
+            {t.pipelineHeading}
           </h2>
           <p className="mt-4 text-base sm:text-lg text-muted leading-relaxed font-normal">
-            Independent, local-first software engineered by Lunoit Labs. All applications prioritize local data ownership, zero background telemetry, and cognitive quiet.
+            {t.pipelineSubheading}
           </p>
         </div>
 
         {/* Dynamic Apps Bento / Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          {APPS_CONFIG.map((app: AppConfig) => (
+          {apps.map((app: AppConfig) => (
             <div
               key={app.id}
               className="rounded-2xl border border-subtle bg-paper p-6 sm:p-7 shadow-2xs flex flex-col justify-between hover:border-strong transition-all"
@@ -94,19 +99,9 @@ export const PipelineShowcase: React.FC<PipelineShowcaseProps> = ({ onOpenDownlo
                   onClick={() => onNavigate?.(`/${app.slug}`)}
                   className="inline-flex items-center gap-1.5 rounded-lg bg-pine px-3.5 py-2 text-xs font-semibold text-paper hover:bg-pine-hover shadow-xs transition-colors"
                 >
-                  <span>Explore {app.shortName}</span>
+                  <span>{t.exploreApp} {app.shortName}</span>
                   <ArrowRight className="h-3 w-3" />
                 </button>
-
-                {app.id === 'lunoite' && onOpenDownload && (
-                  <button
-                    type="button"
-                    onClick={onOpenDownload}
-                    className="inline-flex items-center gap-1 rounded-lg border border-subtle bg-canvas px-3 py-2 text-xs font-medium text-main hover:border-strong transition-colors"
-                  >
-                    <span>Download</span>
-                  </button>
-                )}
 
                 <a
                   href={app.repoUrl}
@@ -122,7 +117,7 @@ export const PipelineShowcase: React.FC<PipelineShowcaseProps> = ({ onOpenDownlo
             </div>
           ))}
 
-          {/* Card 3: Coming Soon Card */}
+          {/* Card 3: More in Development */}
           <div className="rounded-2xl border-2 border-dashed border-subtle bg-paper/50 p-6 sm:p-7 flex flex-col justify-between hover:border-muted/50 transition-all">
             <div>
               <div className="flex items-center gap-3 mb-4">
@@ -131,37 +126,37 @@ export const PipelineShowcase: React.FC<PipelineShowcaseProps> = ({ onOpenDownlo
                 </div>
                 <div>
                   <h3 className="font-serif text-xl font-semibold text-main">
-                    More in Development
+                    {t.devCardTitle}
                   </h3>
                   <span className="font-mono text-xs text-muted">
-                    Lunoit Labs Pipeline
+                    {t.devCardBadge}
                   </span>
                 </div>
               </div>
 
               <p className="text-xs sm:text-sm text-muted leading-relaxed mb-5 font-normal">
-                We are actively prototyping focused, sovereign productivity tools designed for cognitive quiet, local disk truth, and zero vendor lock-in.
+                {t.devCardDesc}
               </p>
 
               <div className="rounded-lg bg-canvas p-4 border border-subtle text-xs space-y-2 text-muted">
-                <div className="font-medium text-main">Active Research Areas:</div>
+                <div className="font-medium text-main">{t.devCardResearchTitle}</div>
                 <ul className="space-y-1 list-disc pl-4 text-[11px]">
-                  <li>Offline cognitive search and indexing</li>
-                  <li>Local canvas and diagramming workspace</li>
-                  <li>Distraction-free deep work timers</li>
+                  <li>{t.devCardResearch1}</li>
+                  <li>{t.devCardResearch2}</li>
+                  <li>{t.devCardResearch3}</li>
                 </ul>
               </div>
             </div>
 
             <div className="pt-6 border-t border-subtle/60 flex items-center justify-between text-xs font-mono text-muted">
-              <span>Status: Prototyping</span>
+              <span>{t.devCardStatus}</span>
               <a
                 href="https://github.com/Lunoit-Labs"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-pine hover:underline inline-flex items-center gap-1"
               >
-                <span>Follow on GitHub</span>
+                <span>{t.devCardFollow}</span>
                 <ExternalLink className="h-3 w-3" />
               </a>
             </div>

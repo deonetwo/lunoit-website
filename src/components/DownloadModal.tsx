@@ -8,6 +8,8 @@ import {
   ShieldCheck
 } from 'lucide-react';
 import { PLATFORM_RELEASES } from '../data/releases';
+import { useLanguage } from '../context/LanguageContext';
+import { siteTranslations } from '../data/translations';
 
 interface DownloadModalProps {
   isOpen: boolean;
@@ -16,6 +18,8 @@ interface DownloadModalProps {
 
 export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose }) => {
   const [copied, setCopied] = useState<boolean>(false);
+  const { lang } = useLanguage();
+  const t = siteTranslations[lang];
 
   // Handle ESC key to close modal
   useEffect(() => {
@@ -53,7 +57,7 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
         <button
           type="button"
           onClick={onClose}
-          aria-label="Close download modal"
+          aria-label={t.modalClose}
           className="absolute top-5 right-5 rounded-lg p-2 text-muted hover:text-main hover:bg-canvas transition-colors"
         >
           <X className="h-5 w-5" />
@@ -68,14 +72,14 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
               className="h-4 w-4 rounded-sm object-contain shrink-0"
             />
             <span className="font-mono text-xs font-semibold uppercase tracking-wider">
-              Release Distribution Channel
+              {t.modalChannel}
             </span>
           </div>
           <h2 id="download-modal-title" className="font-serif text-2xl sm:text-3xl font-semibold text-main">
-            Download Lunoite Markdown v1.2.3
+            {t.modalTitle}
           </h2>
           <p className="text-sm text-muted mt-1">
-            Free and open-core under Lunoit Labs. Built with Tauri v2 for native desktop speed and direct local disk editing.
+            {t.modalDesc}
           </p>
         </div>
 
@@ -84,7 +88,7 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-subtle">
             <div>
               <div className="font-serif text-lg font-semibold text-main">
-                {current.name} Package
+                {current.name} {t.modalPackage}
               </div>
               <div className="font-mono text-xs text-muted">
                 {current.fileName} ({current.fileSize})
@@ -92,23 +96,23 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
             </div>
             <span className="inline-flex items-center gap-1 text-xs font-mono text-pine">
               <ShieldCheck className="h-3.5 w-3.5" />
-              <span>SHA-256 Verified</span>
+              <span>{t.modalShaVerified}</span>
             </span>
           </div>
 
           <div className="grid grid-cols-2 gap-3 text-xs">
             <div>
-              <span className="text-muted block">Architecture:</span>
+              <span className="text-muted block">{t.modalArch}</span>
               <span className="font-medium text-main">{current.architecture}</span>
             </div>
             <div>
-              <span className="text-muted block">Format:</span>
+              <span className="text-muted block">{t.modalFormat}</span>
               <span className="font-medium text-main">{current.format}</span>
             </div>
           </div>
 
           <p className="text-xs text-muted leading-relaxed font-sans">
-            {current.notes}
+            {t.modalNotes}
           </p>
 
           {/* Terminal Command Snippet */}
@@ -116,7 +120,7 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
             <div className="mt-3">
               <div className="flex items-center justify-between mb-1.5">
                 <span className="font-mono text-[11px] text-muted">
-                  Package Manager / Terminal:
+                  {t.modalTerminalTitle}
                 </span>
                 <button
                   type="button"
@@ -126,12 +130,12 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
                   {copied ? (
                     <>
                       <Check className="h-3 w-3" />
-                      <span>Copied</span>
+                      <span>{t.modalCopied}</span>
                     </>
                   ) : (
                     <>
                       <Copy className="h-3 w-3" />
-                      <span>Copy command</span>
+                      <span>{t.modalCopy}</span>
                     </>
                   )}
                 </button>
@@ -151,7 +155,7 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 text-xs text-muted hover:text-main font-mono"
           >
-            <span>View all GitHub release checksums</span>
+            <span>{t.modalViewChecksums}</span>
             <ExternalLink className="h-3 w-3" />
           </a>
 
@@ -161,7 +165,7 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
               onClick={onClose}
               className="w-full sm:w-auto rounded-lg border border-subtle bg-paper px-4 py-2.5 text-xs font-medium text-muted hover:text-main hover:border-strong transition-colors"
             >
-              Close
+              {t.modalClose}
             </button>
             <a
               href="https://github.com/Lunoit-Labs/lunoite-markdown/releases"
@@ -170,7 +174,7 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose })
               className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-lg bg-pine px-5 py-2.5 text-xs font-semibold text-paper hover:bg-pine-hover shadow-xs transition-colors"
             >
               <ArrowDownToLine className="h-4 w-4" />
-              <span>Direct Download</span>
+              <span>{t.modalDirectDownload}</span>
             </a>
           </div>
         </div>

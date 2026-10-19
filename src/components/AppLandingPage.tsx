@@ -22,6 +22,8 @@ import {
 } from 'lucide-react';
 import { AppConfig } from '../types';
 import { GithubIcon } from './icons/GithubIcon';
+import { useLanguage } from '../context/LanguageContext';
+import { siteTranslations } from '../data/translations';
 
 interface AppLandingPageProps {
   app: AppConfig;
@@ -56,6 +58,8 @@ function resolveIcon(name: string) {
 }
 
 export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate }) => {
+  const { lang, setLang } = useLanguage();
+  const t = siteTranslations[lang];
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   const [currentSlideIndex, setCurrentSlideIndex] = useState<number>(0);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
@@ -107,7 +111,7 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
               className="flex items-center gap-2 text-xs font-medium text-muted hover:text-main focus-visible:outline-2 focus-visible:outline-pine"
             >
               <ArrowLeft className="h-4 w-4 text-pine" />
-              <span>A Lunoit Labs Product</span>
+              <span>{t.backToStudio}</span>
             </button>
             <span className="text-subtle">/</span>
             <div className="flex items-center gap-2">
@@ -120,18 +124,18 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
             </div>
           </div>
 
-          <div className="flex items-center gap-3 sm:gap-4 text-xs">
+          <div className="flex items-center gap-2.5 sm:gap-4 text-xs">
             <a
               href="#features"
               className="hidden sm:inline-block text-muted hover:text-main transition-colors focus-visible:outline-2 focus-visible:outline-pine"
             >
-              Features
+              {t.navFeatures}
             </a>
             <a
               href="#download"
               className="hidden sm:inline-block text-muted hover:text-main transition-colors focus-visible:outline-2 focus-visible:outline-pine"
             >
-              Downloads
+              {t.navDownloads}
             </a>
             {app.slug === 'wadd' && (
               <button
@@ -139,7 +143,7 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
                 onClick={() => onNavigate('/wadd/subscription')}
                 className="text-pine font-medium hover:underline transition-colors focus-visible:outline-2 focus-visible:outline-pine"
               >
-                Pricing
+                {t.navPricingShort}
               </button>
             )}
             <button
@@ -147,17 +151,49 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
               onClick={() => onNavigate(`/${app.slug}/privacy`)}
               className="text-muted hover:text-main transition-colors focus-visible:outline-2 focus-visible:outline-pine"
             >
-              Privacy
+              {t.navPrivacy}
             </button>
+
+            {/* Language Switcher Pill */}
+            <div
+              className="flex items-center rounded-md border border-subtle bg-paper p-0.5 text-xs font-mono"
+              title={t.langSwitchTitle}
+            >
+              <button
+                type="button"
+                onClick={() => setLang('id')}
+                className={`px-2 py-0.5 rounded transition-colors text-[11px] font-semibold ${
+                  lang === 'id'
+                    ? 'bg-pine text-paper shadow-2xs'
+                    : 'text-muted hover:text-main'
+                }`}
+                aria-label="Bahasa Indonesia"
+              >
+                ID
+              </button>
+              <button
+                type="button"
+                onClick={() => setLang('en')}
+                className={`px-2 py-0.5 rounded transition-colors text-[11px] font-semibold ${
+                  lang === 'en'
+                    ? 'bg-pine text-paper shadow-2xs'
+                    : 'text-muted hover:text-main'
+                }`}
+                aria-label="English"
+              >
+                EN
+              </button>
+            </div>
+
             <a
               href="https://lynk.id/lunoit"
               target="_blank"
               rel="noopener noreferrer"
-              title="Buy me a coffee"
+              title={t.coffeeTitle}
               className="flex items-center gap-1.5 rounded-md border border-subtle bg-paper px-2.5 py-1 text-muted hover:text-main hover:border-strong transition-colors focus-visible:outline-2 focus-visible:outline-pine"
             >
               <Coffee className="h-3.5 w-3.5 text-pine" />
-              <span className="hidden sm:inline">Coffee</span>
+              <span className="hidden sm:inline">{t.navCoffeeShort}</span>
             </a>
             <a
               href={app.repoUrl}
@@ -167,7 +203,7 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
               className="flex items-center gap-1.5 rounded-md border border-subtle bg-paper px-2.5 py-1 text-muted hover:text-main hover:border-strong transition-colors focus-visible:outline-2 focus-visible:outline-pine"
             >
               <GithubIcon className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">Source</span>
+              <span className="hidden sm:inline">{t.navSourceShort}</span>
             </a>
           </div>
         </div>
@@ -209,7 +245,7 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
               className="inline-flex items-center gap-2 rounded-md bg-pine px-4 py-2.5 text-xs sm:text-sm font-semibold text-paper hover:bg-pine-hover transition-colors shadow-2xs min-h-[44px] focus-visible:outline-2 focus-visible:outline-pine"
             >
               <Download className="h-4 w-4" />
-              <span>Download Latest Release</span>
+              <span>{t.downloadLatestRelease}</span>
             </a>
 
             <a
@@ -219,7 +255,7 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
               className="inline-flex items-center gap-2 rounded-md border border-subtle bg-paper px-4 py-2.5 text-xs sm:text-sm font-medium text-main hover:border-strong hover:bg-canvas transition-colors min-h-[44px] focus-visible:outline-2 focus-visible:outline-pine"
             >
               <GithubIcon className="h-4 w-4" />
-              <span>View Source Code</span>
+              <span>{t.viewSourceCode}</span>
             </a>
 
             {app.slug === 'wadd' && (
@@ -228,13 +264,13 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
                 onClick={() => onNavigate('/wadd/subscription')}
                 className="inline-flex items-center gap-2 rounded-md border border-teal-500/30 bg-teal-500/10 px-4 py-2.5 text-xs sm:text-sm font-medium text-teal-400 hover:bg-teal-500/20 transition-colors min-h-[44px] focus-visible:outline-2 focus-visible:outline-pine"
               >
-                <span>Pricing &amp; Plans</span>
+                <span>{t.pricingPlans}</span>
               </button>
             )}
           </div>
 
           <div className="text-[11px] font-mono text-muted">
-            Engineered with {app.techStack.join(', ')}
+            {t.engineeredWith} {app.techStack.join(', ')}
           </div>
         </section>
 
@@ -249,7 +285,7 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
                 <div className="h-2.5 w-2.5 rounded-full bg-subtle"></div>
               </div>
               <span className="font-mono text-[11px] text-muted">
-                {app.name} Workspace View
+                {app.name} {t.workspaceView}
               </span>
             </div>
 
@@ -262,7 +298,7 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
                   <button
                     type="button"
                     onClick={handlePrevSlide}
-                    aria-label="Previous screenshot"
+                    aria-label={t.prevSlide}
                     className="p-1 rounded text-muted hover:text-main hover:bg-paper transition-colors focus-visible:outline-2 focus-visible:outline-pine"
                   >
                     <ChevronLeft className="h-3.5 w-3.5" />
@@ -270,7 +306,7 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
                   <button
                     type="button"
                     onClick={handleNextSlide}
-                    aria-label="Next screenshot"
+                    aria-label={t.nextSlide}
                     className="p-1 rounded text-muted hover:text-main hover:bg-paper transition-colors focus-visible:outline-2 focus-visible:outline-pine"
                   >
                     <ChevronRight className="h-3.5 w-3.5" />
@@ -313,7 +349,7 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
                 <button
                   type="button"
                   onClick={handlePrevSlide}
-                  aria-label="Previous slide"
+                  aria-label={t.prevSlide}
                   className="absolute left-3 top-1/2 -translate-y-1/2 z-10 hidden sm:flex h-9 w-9 items-center justify-center rounded-full bg-paper/90 backdrop-blur-sm border border-subtle text-main shadow-md hover:bg-paper hover:scale-105 transition-all opacity-85 hover:opacity-100 focus-visible:outline-2 focus-visible:outline-pine"
                 >
                   <ChevronLeft className="h-5 w-5" />
@@ -321,7 +357,7 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
                 <button
                   type="button"
                   onClick={handleNextSlide}
-                  aria-label="Next slide"
+                  aria-label={t.nextSlide}
                   className="absolute right-3 top-1/2 -translate-y-1/2 z-10 hidden sm:flex h-9 w-9 items-center justify-center rounded-full bg-paper/90 backdrop-blur-sm border border-subtle text-main shadow-md hover:bg-paper hover:scale-105 transition-all opacity-85 hover:opacity-100 focus-visible:outline-2 focus-visible:outline-pine"
                 >
                   <ChevronRight className="h-5 w-5" />
@@ -345,7 +381,7 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
                 ))}
               </div>
 
-              {/* Caption - Fixed minimum height to prevent layout shifts */}
+              {/* Caption */}
               <div className="mt-2 px-2 py-1 text-center sm:text-left flex flex-col sm:flex-row sm:items-center justify-between gap-1 min-h-[48px]">
                 <div>
                   <div className="flex items-center justify-center sm:justify-start gap-2">
@@ -369,14 +405,14 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
                     onClick={handlePrevSlide}
                     className="px-3 py-1 text-xs border border-subtle rounded-md bg-canvas text-main font-mono flex items-center gap-1"
                   >
-                    <ChevronLeft className="h-3.5 w-3.5" /> Prev
+                    <ChevronLeft className="h-3.5 w-3.5" /> {t.prevSlide}
                   </button>
                   <button
                     type="button"
                     onClick={handleNextSlide}
                     className="px-3 py-1 text-xs border border-subtle rounded-md bg-canvas text-main font-mono flex items-center gap-1"
                   >
-                    Next <ChevronRight className="h-3.5 w-3.5" />
+                    {t.nextSlide} <ChevronRight className="h-3.5 w-3.5" />
                   </button>
                 </div>
               </div>
@@ -436,10 +472,10 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
         <section id="features" className="space-y-8 scroll-mt-20">
           <div className="border-b border-subtle pb-4">
             <h2 className="text-lg sm:text-xl font-semibold text-main">
-              Key Capabilities &amp; Architecture
+              {t.keyCapabilities}
             </h2>
             <p className="text-xs text-muted mt-1">
-              Engineered for speed, simplicity, and local disk sovereignty.
+              {t.keyCapabilitiesDesc}
             </p>
           </div>
 
@@ -467,10 +503,10 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
         <section id="download" className="space-y-6 scroll-mt-20">
           <div className="border-b border-subtle pb-4">
             <h2 className="text-lg sm:text-xl font-semibold text-main">
-              Download Channels &amp; Releases
+              {t.downloadChannels}
             </h2>
             <p className="text-xs text-muted mt-1">
-              Authentic binaries released through official GitHub Releases.
+              {t.downloadChannelsDesc}
             </p>
           </div>
 
@@ -511,10 +547,10 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
           <section className="space-y-6">
             <div className="border-b border-subtle pb-4">
               <h2 className="text-lg sm:text-xl font-semibold text-main">
-                Frequently Asked Questions
+                {t.faqsTitle}
               </h2>
               <p className="text-xs text-muted mt-1">
-                Everything you need to know about {app.shortName}.
+                {t.faqsSubtitle} {app.shortName}.
               </p>
             </div>
 
@@ -555,7 +591,7 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
           <div className="flex items-center gap-2.5 text-pine font-semibold text-sm">
             <ShieldCheck className="h-5 w-5" />
             <h2 className="text-main font-semibold text-base sm:text-lg">
-              Data Sovereignty Guarantee
+              {t.sovereigntyGuarantee}
             </h2>
           </div>
           <p className="text-xs leading-relaxed text-muted">
@@ -567,7 +603,7 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
               onClick={() => onNavigate(`/${app.slug}/privacy`)}
               className="text-pine font-medium hover:underline inline-flex items-center gap-1 min-h-[44px]"
             >
-              <span>Read Full Privacy Policy</span>
+              <span>{t.readPrivacyPolicy}</span>
               <ExternalLink className="h-3.5 w-3.5" />
             </button>
             <button
@@ -575,7 +611,7 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
               onClick={() => onNavigate(`/${app.slug}/terms`)}
               className="text-pine font-medium hover:underline inline-flex items-center gap-1 min-h-[44px]"
             >
-              <span>Read Terms of Service</span>
+              <span>{t.readTermsOfService}</span>
               <ExternalLink className="h-3.5 w-3.5" />
             </button>
           </div>
@@ -585,14 +621,14 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
       {/* App-Specific Footer */}
       <footer className="mt-20 border-t border-subtle pt-8 text-center text-xs text-muted font-mono">
         <div className="mx-auto max-w-7xl px-4 space-y-2">
-          <p>© {new Date().getFullYear()} Lunoit Labs. Published with local sovereignty.</p>
+          <p>© {new Date().getFullYear()} Lunoit Labs. {t.footerPublishedWith}</p>
           <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
             <button
               type="button"
               onClick={() => onNavigate('/')}
               className="hover:text-main transition-colors"
             >
-              Lunoit Labs Home
+              {t.footerHome}
             </button>
             <span className="text-subtle">·</span>
             <button
@@ -600,7 +636,7 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
               onClick={() => onNavigate(`/${app.slug}/privacy`)}
               className="hover:text-main transition-colors"
             >
-              Privacy Policy
+              {t.navPrivacy}
             </button>
             <span className="text-subtle">·</span>
             <button
@@ -608,7 +644,7 @@ export const AppLandingPage: React.FC<AppLandingPageProps> = ({ app, onNavigate 
               onClick={() => onNavigate(`/${app.slug}/terms`)}
               className="hover:text-main transition-colors"
             >
-              Terms of Service
+              {t.legalTerms}
             </button>
             <span className="text-subtle">·</span>
             <a

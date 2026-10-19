@@ -1,22 +1,24 @@
 import React, { useState } from 'react';
-import { Sun, Moon, Menu, X, ArrowDownToLine, Coffee } from 'lucide-react';
+import { Sun, Moon, Menu, X, Coffee, Globe } from 'lucide-react';
 import { GithubIcon } from './icons/GithubIcon';
 import { ThemeMode } from '../types';
+import { useLanguage } from '../context/LanguageContext';
+import { siteTranslations } from '../data/translations';
 
 interface NavbarProps {
   theme: ThemeMode;
   onToggleTheme: () => void;
-  onOpenDownload?: () => void;
   onNavigate?: (path: string) => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   theme,
   onToggleTheme,
-  onOpenDownload,
   onNavigate,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { lang, setLang } = useLanguage();
+  const t = siteTranslations[lang];
 
   const handleNavClick = (href: string, e: React.MouseEvent) => {
     if (href.startsWith('mailto:')) {
@@ -42,11 +44,11 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   const navLinks = [
-    { label: 'Apps', href: '#apps' },
-    { label: 'Lunoite', href: '/lunoite' },
-    { label: 'Wadd', href: '/wadd' },
-    { label: 'About', href: '#about' },
-    { label: 'Contact', href: 'mailto:support@lunoit.biz.id' },
+    { label: t.navApps, href: '#apps' },
+    { label: t.navLunoite, href: '/lunoite' },
+    { label: t.navWadd, href: '/wadd' },
+    { label: t.navPhilosophy, href: '#about' },
+    { label: t.navContact, href: 'mailto:support@lunoit.biz.id' },
   ];
 
   return (
@@ -84,23 +86,55 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Right Controls */}
         <div className="flex items-center gap-2 shrink-0">
+          {/* Language Switcher Pill (ID | EN) */}
+          <div
+            className="flex items-center rounded-md border border-subtle bg-paper p-0.5 text-xs font-mono"
+            title={t.langSwitchTitle}
+          >
+            <button
+              type="button"
+              onClick={() => setLang('id')}
+              className={`px-2 py-0.5 rounded transition-colors text-[11px] font-semibold ${
+                lang === 'id'
+                  ? 'bg-pine text-paper shadow-2xs'
+                  : 'text-muted hover:text-main'
+              }`}
+              aria-label="Bahasa Indonesia"
+            >
+              ID
+            </button>
+            <button
+              type="button"
+              onClick={() => setLang('en')}
+              className={`px-2 py-0.5 rounded transition-colors text-[11px] font-semibold ${
+                lang === 'en'
+                  ? 'bg-pine text-paper shadow-2xs'
+                  : 'text-muted hover:text-main'
+              }`}
+              aria-label="English"
+            >
+              EN
+            </button>
+          </div>
+
           {/* Buy me a coffee */}
           <a
             href="https://lynk.id/lunoit"
             target="_blank"
             rel="noopener noreferrer"
-            title="Buy me a coffee"
+            title={t.coffeeTitle}
             className="flex items-center gap-1.5 rounded-md border border-subtle bg-paper px-2.5 py-1.5 text-xs font-medium text-muted hover:text-main hover:border-strong transition-colors focus-visible:outline-2 focus-visible:outline-pine shrink-0"
           >
             <Coffee className="h-3.5 w-3.5 text-pine" />
-            <span className="hidden sm:inline">Buy me a coffee</span>
+            <span className="hidden sm:inline">{t.coffeeLabel}</span>
           </a>
+
           {/* Theme Switcher (Dark / Light) */}
           <button
             type="button"
             onClick={onToggleTheme}
-            aria-label={theme === 'light' ? 'Switch to Obsidian dark theme' : 'Switch to Daylight paper theme'}
-            title={theme === 'light' ? 'Obsidian Nocturne (Dark)' : 'Daylight Paper (Light)'}
+            aria-label={theme === 'light' ? t.navThemeDark : t.navThemeLight}
+            title={theme === 'light' ? t.navThemeDark : t.navThemeLight}
             className="flex h-8 w-8 items-center justify-center rounded-md border border-subtle bg-paper text-main hover:border-strong hover:bg-canvas transition-colors focus-visible:outline-2 focus-visible:outline-pine shrink-0"
           >
             {theme === 'light' ? (
@@ -122,23 +156,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             <GithubIcon className="h-3.5 w-3.5" />
           </a>
 
-          {/* Download Lunoite CTA */}
-          {onOpenDownload && (
-            <button
-              type="button"
-              onClick={onOpenDownload}
-              className="hidden lg:flex items-center gap-1.5 rounded-md bg-pine px-3 py-1.5 text-xs font-semibold text-paper hover:bg-pine-hover transition-colors shadow-2xs whitespace-nowrap focus-visible:outline-2 focus-visible:outline-pine"
-            >
-              <ArrowDownToLine className="h-3 w-3" />
-              <span>Download</span>
-            </button>
-          )}
-
           {/* Mobile Menu Hamburger */}
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-label={mobileMenuOpen ? t.closeMenu : t.openMenu}
             className="flex md:hidden h-8 w-8 items-center justify-center rounded-md border border-subtle bg-paper text-main hover:border-strong transition-colors shrink-0 focus-visible:outline-2 focus-visible:outline-pine"
           >
             {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
@@ -161,6 +183,32 @@ export const Navbar: React.FC<NavbarProps> = ({
               </a>
             ))}
             <div className="mt-3 pt-3 border-t border-subtle flex flex-col gap-2">
+              <div className="flex items-center justify-between py-1">
+                <span className="text-xs text-muted flex items-center gap-1.5">
+                  <Globe className="h-3.5 w-3.5 text-pine" />
+                  <span>{t.langSwitchTitle}</span>
+                </span>
+                <div className="flex items-center rounded-md border border-subtle bg-canvas p-0.5 text-xs font-mono">
+                  <button
+                    type="button"
+                    onClick={() => setLang('id')}
+                    className={`px-3 py-1 rounded transition-colors text-xs font-semibold ${
+                      lang === 'id' ? 'bg-pine text-paper shadow-2xs' : 'text-muted'
+                    }`}
+                  >
+                    ID
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setLang('en')}
+                    className={`px-3 py-1 rounded transition-colors text-xs font-semibold ${
+                      lang === 'en' ? 'bg-pine text-paper shadow-2xs' : 'text-muted'
+                    }`}
+                  >
+                    EN
+                  </button>
+                </div>
+              </div>
               <a
                 href="https://lynk.id/lunoit"
                 target="_blank"
@@ -168,7 +216,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 className="flex items-center justify-center gap-2 rounded-md border border-subtle bg-canvas px-4 py-2 text-xs font-medium text-main hover:border-strong transition-colors"
               >
                 <Coffee className="h-3.5 w-3.5 text-pine" />
-                <span>Buy me a coffee</span>
+                <span>{t.coffeeLabel}</span>
               </a>
               <a
                 href="https://github.com/Lunoit-Labs"

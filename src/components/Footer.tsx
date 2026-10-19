@@ -2,13 +2,17 @@ import React from 'react';
 import { ArrowUp, Mail, ExternalLink, Heart } from 'lucide-react';
 import { GithubIcon } from './icons/GithubIcon';
 import { APPS_CONFIG } from '../data/apps';
+import { useLanguage } from '../context/LanguageContext';
+import { siteTranslations } from '../data/translations';
 
 interface FooterProps {
-  onOpenDownload?: () => void;
   onNavigate?: (path: string) => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenDownload, onNavigate }) => {
+export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
+  const { lang } = useLanguage();
+  const t = siteTranslations[lang];
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -24,8 +28,8 @@ export const Footer: React.FC<FooterProps> = ({ onOpenDownload, onNavigate }) =>
   return (
     <footer className="border-t border-subtle bg-paper text-muted text-xs">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
-          {/* Brand Column */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+          {/* Brand Column (Span 2) */}
           <div className="md:col-span-2 space-y-4">
             <div className="flex items-center gap-2.5">
               <img
@@ -38,7 +42,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenDownload, onNavigate }) =>
               </span>
             </div>
             <p className="max-w-md text-muted leading-relaxed font-normal">
-              An independent software studio and app publisher crafting sovereign, distraction-free tools for writers, engineers, and everyday productivity.
+              {t.footerStudioDesc}
             </p>
             <div className="flex items-center gap-2 text-xs font-mono text-muted">
               <Mail className="h-3.5 w-3.5 text-pine" />
@@ -50,7 +54,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenDownload, onNavigate }) =>
               </a>
             </div>
             <div className="pt-2 border-t border-subtle flex flex-wrap items-center gap-2 text-[11px] font-mono">
-              <span className="text-muted">Support:</span>
+              <span className="text-muted">{t.footerSupportLabel}</span>
               <a
                 href="https://ko-fi.com/lunoit"
                 target="_blank"
@@ -73,10 +77,10 @@ export const Footer: React.FC<FooterProps> = ({ onOpenDownload, onNavigate }) =>
             </div>
           </div>
 
-          {/* Software Column */}
+          {/* Applications Column */}
           <div className="space-y-3">
             <h4 className="font-mono text-xs font-semibold text-main uppercase tracking-wider">
-              Applications
+              {t.footerColApps}
             </h4>
             <ul className="space-y-2">
               {APPS_CONFIG.map((app) => (
@@ -92,28 +96,19 @@ export const Footer: React.FC<FooterProps> = ({ onOpenDownload, onNavigate }) =>
               ))}
               <li>
                 <a
-                  href="/wadd/subscription"
-                  onClick={(e) => handleLink('/wadd/subscription', e)}
-                  className="hover:text-main transition-colors text-pine font-medium flex items-center gap-1.5"
-                >
-                  <span>Wadd Licensing &amp; Pricing</span>
-                </a>
-              </li>
-              <li>
-                <a
                   href="#apps"
                   className="hover:text-main transition-colors text-muted"
                 >
-                  All Apps &amp; Roadmap
+                  {t.footerAllApps}
                 </a>
               </li>
             </ul>
           </div>
 
-          {/* Studio Resources */}
+          {/* Studio & Community Column */}
           <div className="space-y-3">
             <h4 className="font-mono text-xs font-semibold text-main uppercase tracking-wider">
-              Studio &amp; Support
+              {t.footerColStudio}
             </h4>
             <ul className="space-y-2">
               <li>
@@ -124,12 +119,12 @@ export const Footer: React.FC<FooterProps> = ({ onOpenDownload, onNavigate }) =>
                   className="hover:text-main transition-colors flex items-center gap-1.5"
                 >
                   <GithubIcon className="h-3.5 w-3.5" />
-                  <span>GitHub Organization</span>
+                  <span>{t.footerGithubOrg}</span>
                 </a>
               </li>
               <li>
                 <a href="#about" className="hover:text-main transition-colors">
-                  Three Craft Pillars
+                  {t.footerThreePillars}
                 </a>
               </li>
               <li>
@@ -140,7 +135,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenDownload, onNavigate }) =>
                   className="hover:text-main transition-colors flex items-center gap-1"
                 >
                   <Heart className="h-3 w-3 text-pine fill-pine/20" />
-                  <span>Ko-fi (International)</span>
+                  <span>{t.footerKofi}</span>
                   <ExternalLink className="h-2.5 w-2.5" />
                 </a>
               </li>
@@ -151,75 +146,8 @@ export const Footer: React.FC<FooterProps> = ({ onOpenDownload, onNavigate }) =>
                   rel="noopener noreferrer"
                   className="hover:text-main transition-colors flex items-center gap-1"
                 >
-                  <span>Lynk.id (QRIS / Indo)</span>
+                  <span>{t.footerLynk}</span>
                   <ExternalLink className="h-2.5 w-2.5" />
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://markdown.lunoit.biz.id/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-main transition-colors flex items-center gap-1"
-                >
-                  <span>markdown.lunoit.biz.id</span>
-                  <ExternalLink className="h-2.5 w-2.5" />
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://wadd.lunoit.biz.id/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-main transition-colors flex items-center gap-1"
-                >
-                  <span>wadd.lunoit.biz.id</span>
-                  <ExternalLink className="h-2.5 w-2.5" />
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Legal Column */}
-          <div className="space-y-3">
-            <h4 className="font-mono text-xs font-semibold text-main uppercase tracking-wider">
-              Legal &amp; Privacy
-            </h4>
-            <ul className="space-y-2">
-              <li>
-                <a
-                  href="/lunoite/privacy"
-                  onClick={(e) => handleLink('/lunoite/privacy', e)}
-                  className="hover:text-main transition-colors text-main font-medium"
-                >
-                  Lunoite Privacy
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/lunoite/terms"
-                  onClick={(e) => handleLink('/lunoite/terms', e)}
-                  className="hover:text-main transition-colors"
-                >
-                  Lunoite Terms
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/wadd/privacy"
-                  onClick={(e) => handleLink('/wadd/privacy', e)}
-                  className="hover:text-main transition-colors text-main font-medium"
-                >
-                  Wadd Privacy
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/wadd/terms"
-                  onClick={(e) => handleLink('/wadd/terms', e)}
-                  className="hover:text-main transition-colors"
-                >
-                  Wadd Terms
                 </a>
               </li>
             </ul>
@@ -229,9 +157,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenDownload, onNavigate }) =>
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-subtle flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px]">
           <div>
-            <span>© {new Date().getFullYear()} Lunoit Labs. All rights reserved.</span>
-            <span className="mx-2 text-subtle">/</span>
-            <span>Zero trackers, zero telemetry, 100% sovereign.</span>
+            <span>© {new Date().getFullYear()} Lunoit Labs. {t.footerAllRights}</span>
           </div>
 
           <div className="flex items-center gap-4">
@@ -240,7 +166,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenDownload, onNavigate }) =>
               onClick={scrollToTop}
               className="flex items-center gap-1 text-muted hover:text-main transition-colors"
             >
-              <span>Back to top</span>
+              <span>{t.footerBackToTop}</span>
               <ArrowUp className="h-3 w-3" />
             </button>
           </div>
